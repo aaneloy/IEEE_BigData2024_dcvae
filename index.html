@@ -1,0 +1,962 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <title>dCVAE</title>
+	<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+
+    <!-- Favicon link -->
+    <link rel="icon" type="image/png" href="Figures/1.png">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/white.min.css" id="theme">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+
+    <style>
+        /* Background styling */
+        body {
+            background-color: #f0f4fa;
+            overflow: hidden;
+        }
+
+        /* Neural network animation */
+        .neural-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.1;
+        }
+
+        .node {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background-color: #000;
+            border-radius: 50%;
+            animation: floatNode 10s ease-in-out infinite;
+        }
+
+        @keyframes floatNode {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .connection {
+            position: absolute;
+            width: 2px;
+            background-color: #000;
+            transform-origin: top left;
+        }
+
+        /* Title styling with hover effect */
+        .title {
+            font-size: 1.3em;
+            color: navy;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .title:hover {
+            color: #002147;
+        }
+
+        /* Author links with hover effect */
+        a.author-link {
+            font-size: 0.6em;
+            color: #002147;
+            text-decoration: none;
+        }
+
+        a.author-link:hover {
+            color: #0056b3;
+            text-decoration: underline;
+        }
+
+        .designation {
+            font-size: 0.5em;
+            color: black;
+            margin-bottom: 10px;
+        }
+
+        .website {
+            font-size: 0.8em;
+            color: #333;
+            margin-top: 15px;
+        }
+
+        /* Link hover effects */
+        .website a:hover, .website a {
+            color: #1a73e8;
+            text-decoration: none;
+        }
+
+        /* General text styling */
+        .large-text {
+            font-size: 1.2em;
+            color: #002147;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .normal-text {
+            font-size: 0.85em;
+            color: black;
+        }
+
+        /* Circular headshot styling */
+        .author-headshot {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+        }
+
+        /* Image styling */
+        .header-image {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            display: block;
+            padding-bottom: 20px;
+        }
+
+        /* Flex container gap for spacing */
+        .author-info {
+            display: flex;
+            align-items: center;
+            gap: 15px; /* Adds consistent space between image and text */
+        }
+    </style>
+</head>
+<body>
+    <!-- Neural network background with nodes and connections generated in JavaScript -->
+    <div class="neural-bg" id="neural-bg"></div>
+
+    <div class="reveal">
+        <div class="slides">
+
+            <!-- Title Slide -->
+            <section>
+                <!-- Title with smaller font -->
+                <div class="title" style="font-size: 1.1em; color: navy;">Disentangled Conditional Variational Autoencoder for Unsupervised Anomaly Detection</div>
+                <!-- Conference subtitle with smaller font -->
+                <div class="normal-text" style="font-size: 0.4em; margin-top: 5px;">PaperID: BigData693, 2024 IEEE International Conference on Big Data (IEEE BigData 2024), Washington, DC, USA - December 15 - 18, 2024</div>
+                
+                <!-- Two-column layout for authors, evenly spaced -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
+                    <!-- Left Column: Asif Ahmed Neloy with headshot -->
+                    <div class="author-info" style="text-align: left; width: 48%;">
+                        <img src="Figures/asif.jpg" alt="Asif Ahmed Neloy" class="author-headshot">
+                        <div>
+                            <a href="https://aaneloy.github.io/" target="_blank" class="author-link">Asif Ahmed Neloy</a>
+                            <div class="designation">Faculty Member, Douglas College &<br>
+                                University of British Columbia (UBC)<br>
+                                Canada.<br>
+								<span style="color: #000080; text-decoration: underline;">neloya@douglascollege.ca</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Right Column: Dr. Maxime Turgeon with headshot -->
+                    <div class="author-info" style="text-align: left; width: 50%;">
+                        <img src="Figures/max.jpg" alt="Dr. Maxime Turgeon" class="author-headshot">
+                        <div>
+                            <a href="https://www.maxturgeon.ca/" target="_blank" class="author-link">Dr. Maxime Turgeon</a>
+                            <div class="designation">Data Scientist, Tesera Systems <br>
+                                Adjunct Professor, Department of Statistics, University of Manitoba<br>
+                                Canada.<br>
+								<span style="color: #000080; text-decoration: underline;">max.turgeon@umanitoba.ca</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+				<div style="display: flex; justify-content: center; align-items: center; margin-top: 20px; gap: 10px;">
+					<img src="Figures/dc.jpg" alt="Douglas College" style="height: 70px;">
+					<img src="Figures/ubc.png" alt="University of British Columbia" style="height: 50px;">
+					<img src="Figures/vada.png" alt="VADA Program" style="height: 60px;">
+					<img src="Figures/um.jpg" alt="University of Manitoba" style="height: 100px;">
+				</div>
+
+                <!-- Presentation Link with smaller font -->
+                <div class="website" style="font-size: 0.30em; margin-top: 20px;">
+                    <a href="https://aaneloy.github.io/IEEE_BigData2024_dcvae/" target="_blank">https://aaneloy.github.io/IEEE_BigData2024_dcvae/</a>
+                </div>
+            </section>
+
+			<section style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; margin-top: 20px;">
+				<!-- Centered header -->
+				<h1 style="font-size: 0.8em; color: navy; font-weight: bold; margin-bottom: 20px;text-transform: none;">Unsupervised Anomaly Detection using Auto-encoders</h1>
+				
+				<div style="display: flex; width: 100%; justify-content: space-between; align-items: flex-start;">
+					<!-- Left side: Text content -->
+					<div style="width: 60%; padding-right: 20px; text-align: left;">
+						<div style="font-size: 0.50em; color: black;">
+							<ul>
+								<li><strong>Why Auto-encoders:</strong>
+									<ul>
+										<li>Learn compressed representations, making it easier to identify deviations.</li>
+										<li>Capture complex patterns in data without needing labeled examples.</li>
+										<li>Ideal for high-dimensional data like images or sensor data.</li>
+									</ul>
+								</li>
+								<li><strong>How Autoencoders Detect Anomalies:</strong>
+									<ul>
+										<li>Reconstruct input data and flag high reconstruction errors as anomalies.</li>
+										<li>Can adapt to various domains, identifying subtle anomalies in healthcare, cybersecurity, and more.</li>
+									</ul>
+								</li>
+								<li><strong>Autoencoders in Anomaly Detection:</strong>
+									<ul>
+										<li><strong>Why Autoencoders?</strong> Autoencoders efficiently capture the core structure in data, making them effective for anomaly detection.</li>
+										<li><strong>Low Reconstruction Error:</strong> Normal data points have low reconstruction error, fitting closely to learned patterns</li>
+										<li>Continuously learn from new data, ideal for dynamic, real-time environments.</li>
+									</ul>
+								</li>
+								</ul>
+						</div>
+					</div>
+			
+					<!-- Right side: Visual element -->
+					<div id="autoencoder-visual" style="width: 40%; height: 400px; border: 1px solid #ccc;"></div>
+				</div>
+			
+				<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+				<script>
+					// Normal data points
+					const normalData = { x: [], y: [], mode: 'markers', name: 'Normal Data', marker: { color: 'blue', size: 6 }};
+					for (let i = 0; i < 100; i++) {
+						normalData.x.push(Math.random() * 2 - 1);
+						normalData.y.push(Math.random() * 2 - 1);
+					}
+			
+					// Anomaly point
+					const anomaly = { x: [3], y: [3], mode: 'markers', name: 'Anomaly', marker: { color: 'red', size: 12 } };
+			
+					// Reconstructed data points (simulate reconstruction close to original for normal, shifted for anomaly)
+					const reconstructedNormal = { x: [], y: [], mode: 'markers', name: 'Reconstructed Normal', marker: { color: 'lightblue', size: 6 }};
+					for (let i = 0; i < 100; i++) {
+						reconstructedNormal.x.push(normalData.x[i] + (Math.random() * 0.1 - 0.05));
+						reconstructedNormal.y.push(normalData.y[i] + (Math.random() * 0.1 - 0.05));
+					}
+					const reconstructedAnomaly = { x: [1], y: [1], mode: 'markers', name: 'High Error (Anomaly)', marker: { color: 'orange', size: 12 } };
+			
+					// Layout and plot settings
+					const layout = {
+						title: 'Autoencoder for Anomaly Detection',
+						xaxis: { title: 'Feature 1', range: [-2, 4] },
+						yaxis: { title: 'Feature 2', range: [-2, 4] },
+						showlegend: true,
+					};
+			
+					Plotly.newPlot('autoencoder-visual', [normalData, anomaly, reconstructedNormal, reconstructedAnomaly], layout);
+				</script>
+			</section>
+
+			<section style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; margin-top: 20px;">
+				<!-- Centered header -->
+				<h1 style="font-size: 0.8em; color: navy; font-weight: bold; margin-bottom: 20px; text-transform: none;">Recent Advancements in VAE Architectures</h1>
+			
+				<div style="display: flex; width: 100%; justify-content: space-between; align-items: flex-start;">
+					<!-- Left Column: First two papers -->
+					<div style="width: 45%; padding-right: 10px; text-align: left;">
+						<div style="font-size: 0.50em; color: black;">
+							<ul>
+								<li><strong>Feature Disentangling with Increment Strategy</strong>
+									<ul>
+										<li><em>H. Li et al.</em>: Introduced a <strong>Feature Disentangling Autoencoder</strong> for targeted anomaly detection in reactor core temperatures.</li>
+									</ul>
+								</li>
+								<li style="margin-top: 10px;"><strong>ELBO Convergence to Sum of Entropies</strong>
+									<ul>
+										<li><em>S. Damm et al.</em>: Improved VAE optimization stability by demonstrating ELBO decompositions convergence to entropy sum.</li>
+									</ul>
+								</li>
+							</ul>
+						</div>
+					</div>
+			
+					<!-- Right Column: Next two papers -->
+					<div style="width: 45%; padding-left: 10px; text-align: left;">
+						<div style="font-size: 0.50em; color: black;">
+							<ul>
+								<li><strong>Latent Space Partitioning via Mutual Information</strong>
+									<ul>
+										<li><em>M. Vera et al.</em>: Used <strong>mutual information regularization</strong> for informative latent feature learning in VAEs.</li>
+									</ul>
+								</li>
+								<li style="margin-top: 10px;"><strong>Metrics for Measuring Disentanglement</strong>
+									<ul>
+										<li><em>M. A. Carbonneau et al.</em>: Reviewed metrics for disentanglement, improving feature separation in latent space.</li>
+									</ul>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			
+				<!-- Bottom Centered: Last Paper -->
+				<div style="width: 60%; text-align: center; margin-top: 20px; margin-left: auto; margin-right: auto;">
+					<div style="font-size: 0.50em; color: black;">
+						<ul style="list-style-position: inside;">
+							<li><strong>Total Correlation (TC) Loss for Reducing Redundancy</strong>
+								<ul>
+									<li><em>A. Staffini et al.</em>: Utilized TC loss in a VAE-BiLSTM model, reducing latent dimension redundancy and enhancing anomaly detection for continuous data.</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</section>
+
+
+			<section style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; margin-top: 20px;">
+				<!-- Centered header -->
+				<h1 style="font-size: 0.8em; color: navy; font-weight: bold; margin-bottom: 20px; text-transform: none;">Shortcomings in Auto-encoder Architectures</h1>
+			
+				<div style="display: flex; width: 100%; justify-content: space-between; align-items: flex-start;">
+					<!-- Left Column -->
+					<div style="width: 48%; padding-right: 20px; text-align: left;">
+						<div style="font-size: 0.50em; color: black;">
+							<ul>
+								<li><strong>Loss of Essential Information</strong>
+									<ul style="margin-bottom: 10px;">
+										<li>Difficulty balancing disentanglement with retaining crucial details.</li>
+										<li>Results in the omission of key features needed for anomaly detection.</li>
+									</ul>
+								</li>
+								<li><strong>Trade-offs with Disentanglement</strong>
+									<ul style="margin-bottom: 10px;">
+										<li>Focus on independent latent factors often reduces reconstruction quality.</li>
+										<li>Lower accuracy in identifying subtle anomalies.</li>
+									</ul>
+								</li>
+							</ul>
+						</div>
+					</div>
+			
+					<!-- Right Column -->
+					<div style="width: 48%; padding-left: 20px; text-align: left;">
+						<div style="font-size: 0.50em; color: black;">
+							<ul>
+								<li><strong>Sensitivity to Total Correlation (TC) Loss</strong>
+									<ul style="margin-bottom: 10px;">
+										<li>While reducing dependencies among latent features, high TC penalization weakens reconstruction.</li>
+									</ul>
+								</li>
+								<li><strong>Challenges in Real-World Applications</strong>
+									<ul style="margin-bottom: 10px;">
+										<li>Difficulty in capturing complex variations within real-world datasets.</li>
+										<li>Subtle anomalies may be misclassified or overlooked.</li>
+									</ul>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			
+				<!-- Bottom Centered: Meta-Prior Factors -->
+				<div style="width: 60%; text-align: center; margin-top: 20px; margin-left: auto; margin-right: auto;">
+					<div style="font-size: 0.50em; color: black;">
+						<ul>
+							<li>❌ <strong>Disentanglement:</strong> Learn disentangled latent features for more robust anomaly detection.</li>
+							<li>❌ <strong>Minimize TC Loss:</strong> Reduce redundancy among latent features while maintaining reconstruction quality.</li>
+							<li>❌ <strong>Improve Reconstruction:</strong> Enhance reconstruction accuracy to better capture subtle anomalies.</li>
+						</ul>
+					</div>
+				</div>
+			</section>
+			
+			<section style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; margin-top: 20px;">
+				<!-- Centered header -->
+				<h1 style="font-size: 0.8em; color: navy; font-weight: bold; margin-bottom: 20px; text-transform: none;">Architecture of dCVAE</h1>
+			
+				<!-- Three-column layout for core components -->
+				<div style="display: flex; width: 100%; justify-content: space-around; align-items: flex-start; text-align: left; font-size: 0.50em; color: black; margin-bottom: 20px;">
+					
+					<!-- Disentanglement Learning Column -->
+					<div style="width: 30%;">
+						<h3 style="font-size: 0.7em; color: navy; font-weight: bold; text-align: center;text-transform: none;">Disentanglement Learning</h3>
+						<ul>
+							<li><strong>&beta;-VAE</strong>: Enhanced from β-VAE to better isolate independent features.</li>
+							<li>Creates distinct latent representations, aiding precise anomaly detection.</li>
+						</ul>
+					</div>
+			
+					<!-- Information Theory Principles Column -->
+					<div style="width: 30%;">
+						<h3 style="font-size: 0.7em; color: navy; font-weight: bold; text-align: center;text-transform: none;">Information Theory Principles</h3>
+						<ul>
+							<li><strong>Total Correlation (TC) Loss</strong>: Minimizes redundancy in latent dimensions.</li>
+							<li>Improves feature diversity for clearer anomaly identification.</li>
+						</ul>
+					</div>
+			
+					<!-- Conditioning with CVAE Column -->
+					<div style="width: 30%;">
+						<h3 style="font-size: 0.7em; color: navy; font-weight: bold; text-align: center;text-transform: none;">Conditioning with CVAE</h3>
+						<ul>
+							<li>Utilizes <strong>Conditional VAE</strong> to refine latent space targeting specific anomalies.</li>
+							<li>Adapts model to complex datasets by conditioning variables.</li>
+						</ul>
+					</div>
+				</div>
+			
+				<!-- Centered Problems Solved Section -->
+				<div style="width: 60%; text-align: center; margin-top: 20px; margin-left: auto; margin-right: auto;text-transform: none;">
+					<h3 style="font-size: 0.5em; color: navy; font-weight: bold;text-transform: none;">Key Problems dCVAE Solves</h3>
+					<ul style="font-size: 0.50em; color: black;">
+						<li>✅ Capture Independent Features: Latent variables hold distinct information for enhanced anomaly detection.</li>
+						<li>✅ Reduce Latent Space Redundancy: Minimizes redundancy, enhancing feature focus.</li>
+						<li>✅ High-Precision Anomaly Detection: High reconstruction quality distinguishes normal from anomalous data.</li>
+					</ul>
+				</div>
+			</section>
+			
+			<section style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; margin-top: 20px;margin-bottom: 20px;">
+				<!-- Centered header -->
+				<h1 style="font-size: 0.8em; color: navy; font-weight: bold; margin-bottom: 20px; text-transform: none;">Formulation of dCVAE - Part 1</h1>
+			
+				<!-- Full-width layout for core components -->
+				<div style="width: 100%; text-align: left; font-size: 0.50em; color: black; margin: 0 0 20px 0; padding: 0;">
+					
+					<!-- Step 1: Latent Variable Disentanglement -->
+					<h3 style="font-size: 0.9em; color: navy; font-weight: bold; text-align: center;text-transform: none;">Step 1: Latent Variable Disentanglement (β-VAE)</h3>
+					<ul style="line-height: 1.5; padding: 0;">
+						<li><strong>β-VAE</strong>: Introduces the β-weighted KL-divergence to enforce disentanglement.</li>
+						<ul>
+							<li><strong>Isolates independent latent factors</strong>, enhancing the model’s capacity to capture meaningful structure in anomaly detection.</li>
+							<li><strong>Improves feature disentanglement</strong>, which helps dCVAE to produce clearer and more distinct anomaly representations.</li>
+						</ul>
+					</ul>
+					<pre style="font-size: 0.9em; white-space: nowrap; overflow: hidden; text-align: center; margin: 10px 0;">
+				L<sub>βVAE</sub>(θ, φ) = E<sub>q<sub>φ</sub>(z | x)</sub> [log p<sub>θ</sub>(x | z)] - β D<sub>KL</sub>(q<sub>φ</sub>(z | x) || p(z))
+					</pre>
+					
+					<!-- Step 2: Mutual Information via CorEx -->
+					<h3 style="font-size: 0.9em; color: navy; font-weight: bold; text-align: center; margin-top: 20px;text-transform: none;">Step 2: Mutual Information via CorEx</h3>
+					<ul style="line-height: 1.5; padding: 0;">
+						<li><strong>Enhanced Disentanglement</strong>: CorEx minimizes total correlation in latent variables, isolating independent features for anomaly detection.</li>
+						<li><strong>Informativeness Maximization</strong>: CorEx maximizes the informativeness of latent representations, preserving essential details while reducing noise.</li>
+					</ul>
+					<pre style="font-size: 0.8em; white-space: nowrap; text-align: center; margin: 10px 0;">
+				L(θ; x) = Σ<sub>i=1</sub><sup>d</sup> I<sub>θ</sub>(x<sub>i</sub>: z) - Σ<sub>i=1</sub><sup>m</sup> I<sub>θ</sub>(z<sub>i</sub>: x) ≥ Σ<sub>i=1</sub><sup>d</sup> H(x<sub>i</sub>) + E<sub>p<sub>θ</sub>(x, z)</sub>(log q<sub>φ</sub>(x | z)) - D<sub>KL</sub>(p<sub>θ</sub>(z | x) || r<sub>α</sub>(z))
+					</pre>
+					
+				</div>
+			</section>
+			
+
+			
+
+			<section style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; margin-top: 10px; margin-bottom: 20px;">
+				<!-- Centered header -->
+				<h1 style="font-size: 0.9em; color: navy; font-weight: bold; margin-bottom: 20px; text-transform: none;">Formulation of dCVAE - Part 2</h1>
+			
+				<!-- Full-width layout for core components -->
+				<div style="width: 100%; text-align: left; font-size: 0.50em; color: black; margin: 0 0 20px 0; padding: 0;">
+			
+					<!-- Step 3: Conditional Disentanglement via CVAE -->
+					<h3 style="font-size: 0.9em; color: navy; font-weight: bold; text-align: center; text-transform: none;">Step 3: Conditional Disentanglement via CVAE</h3>
+					<ul style="line-height: 1.5; padding: 0;">
+						<li>Uses <strong>class labels (c)</strong> to enhance disentanglement, ensuring informative latent variables.</li>
+						<li>Optimizes with Conditional Mutual Information to model known sources of data variation.</li>
+					</ul>
+					<pre style="font-size: 0.9em; white-space: nowrap; text-align: center; margin-top: 20px; margin-bottom: 20px;">
+				L(θ; x, c) = TC<sub>θ</sub>(x | c) − TC<sub>θ</sub>(x | z, c) − TC<sub>θ</sub>(z | c)
+					</pre>
+			
+					<!-- Step 4: Objective Function of dCVAE -->
+					<h3 style="font-size: 0.9em; color: navy; font-weight: bold; text-align: center; margin-top: 20px; text-transform: none;">Step 4: Objective Function of dCVAE</h3>
+					<ul style="line-height: 1.5; padding: 0;">
+						<li>Combines disentanglement, mutual information, and conditional variational constraints.</li>
+						<li>Maximizes latent variable informativeness while minimizing redundancy for high-quality reconstruction.</li>
+					</ul>
+					<pre style="font-size: 0.9em; white-space: nowrap; text-align: center; margin-top: 20px; margin-bottom: 20px;">
+				L(θ; x, c) ≥ Σ<sub>i=1</sub><sup>n</sup> H(x<sub>i</sub> | c) + E(log q<sub>φ</sub>(x | z, c)) - Σ<sub>i=1</sub><sup>m</sup> β D<sub>KL</sub>(p(z<sub>i</sub> | x, c) || r(z<sub>i</sub> | c))
+					</pre>
+			
+					<!-- Explanation of dCVAE Objective Function Terms -->
+					<div style="font-size: 0.9em; color: black; margin-top: 20px;">
+						<ul style="line-height: 1.5; padding: 0;">
+							<li><strong>Σ<sub>i=1</sub><sup>n</sup> H(x<sub>i</sub> | c):</strong> Represents the conditional entropy, capturing variability in <em>x</em> given class label <em>c</em>.</li>
+							<li><strong>E(log q<sub>φ</sub>(x | z, c)):</strong> Expected log-likelihood term ensuring high-quality reconstruction by the decoder.</li>
+							<li><strong>Σ<sub>i=1</sub><sup>m</sup> β D<sub>KL</sub>(p(z<sub>i</sub> | x, c) || r(z<sub>i</sub> | c)):</strong> KL-divergence term with weight β, regularizing latent space by reducing redundancy and improving disentanglement.</li>
+						</ul>
+					</div>
+				</div>
+			</section>
+			
+			
+			<section style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; margin-top: 20px;">
+				<!-- Centered header -->
+				<h1 style="font-size: 0.8em; color: navy; font-weight: bold; margin-bottom: 20px; text-transform: none;">Experiments</h1>
+			
+				<div style="display: flex; width: 100%; justify-content: space-around; align-items: flex-start; text-align: left; font-size: 0.50em; color: black; margin-bottom: 20px;">
+					
+					<!-- Left Column: Models -->
+					<div style="width: 45%; padding-right: 10px;margin-left: 10%;">
+						<h3 style="font-size: 0.9em; color: navy; font-weight: bold; text-align: left;">Models</h3>
+						<ul style="line-height: 1.5; padding: 0;">
+							<li>VAE</li>
+							<li>CVAE</li>
+							<li>β-VAE</li>
+							<li>Factor-VAE</li>
+							<li>RFVAE</li>
+						</ul>
+					</div>
+			
+					<!-- Right Column: Datasets -->
+					<div style="width: 45%; padding-left: 10px;margin-left: 5%;">
+						<h3 style="font-size: 0.9em; color: navy; font-weight: bold; text-align: left;">Datasets</h3>
+						<ul style="line-height: 1.5; padding: 0;">
+							<li>MNIST</li>
+							<li>Fashion-MNIST (FMNIST)</li>
+							<li>KMNIST</li>
+							<li>EMNIST</li>
+						</ul>
+					</div>
+				</div>
+			
+				<!-- Centered Bottom: Experiment Metrics -->
+				<div style="width: 60%; text-align: center; margin-top: 20px; margin-left: auto; margin-right: auto;text-transform: none;">
+					<h3 style="font-size: 0.5em; color: navy; font-weight: bold;text-transform: none;">Experiment Metrics</h3>
+					<ul style="font-size: 0.50em; color: black;">
+						<li><strong>Downstream Tasks:</strong> Reconstructions, Manifold Learning, Latent Representation Analysis</li>
+						<br>
+						<li><strong>Classification Tasks:</strong> Anomaly Detection, ROC-AUC, Accuracy Evaluation</li>
+						<br>
+						<li>Used <strong>Anomaly Score</strong> (<span style="font-family: 'Courier New', monospace;">𝒜</span>) and <strong>Reconstruction Error</strong> (<span style="font-family: 'Courier New', monospace;">ℰ</span>) to assess model performance in anomaly identification.</li>
+
+					</ul>
+				</div>
+			</section>
+					
+															
+			
+			<section style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; margin-top: 20px;">
+				<!-- Centered header -->
+				<h1 style="font-size: 0.8em; color: navy; font-weight: bold; margin-bottom: 20px; text-transform: none;text-transform: none;">Results - Reconstruction (EMNIST and KMNIST)</h1>
+			
+				<!-- Image grid for reconstructions with scores -->
+				<div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-bottom: 20px;">
+					<!-- EMNIST images row 1 with scores -->
+					<div>
+						<img src="Figures/EMNIST (1).png" alt="EMNIST Image 1" style="width: 100px; height: 100px;">
+						<div style="font-size: 0.4em; text-align: center;"><span style="font-family: 'Courier New', monospace;">ℰ</span> = -235, <span style="font-family: 'Courier New', monospace;">𝒜</span> = 0.97</div>
+					</div>
+					
+					<div>
+						<img src="Figures/EMNIST (2).png" alt="EMNIST Image 2" style="width: 100px; height: 100px;">
+						<div style="font-size: 0.4em; text-align: center;"><span style="font-family: 'Courier New', monospace;">ℰ</span> = -248, <span style="font-family: 'Courier New', monospace;">𝒜</span> = 0.90</div>
+					</div>
+			
+					<div>
+						<img src="Figures/EMNIST (3).png" alt="EMNIST Image 3" style="width: 100px; height: 100px;">
+						<div style="font-size: 0.4em; text-align: center;"><span style="font-family: 'Courier New', monospace;">ℰ</span> = -245, <span style="font-family: 'Courier New', monospace;">𝒜</span> = 0.91</div>
+					</div>
+			
+					<div>
+						<img src="Figures/EMNIST (4).png" alt="EMNIST Image 4" style="width: 100px; height: 100px;">
+						<div style="font-size: 0.4em; text-align: center;"><span style="font-family: 'Courier New', monospace;">ℰ</span> = -246, <span style="font-family: 'Courier New', monospace;">𝒜</span> = 0.91</div>
+					</div>
+			
+					<div>
+						<img src="Figures/EMNIST (5).png" alt="EMNIST Image 5" style="width: 100px; height: 100px;">
+						<div style="font-size: 0.4em; text-align: center;"><span style="font-family: 'Courier New', monospace;">ℰ</span> = -244, <span style="font-family: 'Courier New', monospace;">𝒜</span> = 0.92</div>
+					</div>
+			
+					<div>
+						<img src="Figures/EMNIST (6).png" alt="EMNIST Image 6" style="width: 100px; height: 100px;">
+						<div style="font-size: 0.4em; text-align: center;"><span style="font-family: 'Courier New', monospace;">ℰ</span> = -246, <span style="font-family: 'Courier New', monospace;">𝒜</span> = 0.92</div>
+					</div>
+			
+					<!-- KMNIST images row 2 with scores -->
+					<div>
+						<img src="Figures/KMNIST (1).png" alt="KMNIST Image 1" style="width: 100px; height: 100px;">
+						<div style="font-size: 0.4em; text-align: center;"><span style="font-family: 'Courier New', monospace;">ℰ</span> = -171, <span style="font-family: 'Courier New', monospace;">𝒜</span> = 0.33</div>
+					</div>
+					
+					<div>
+						<img src="Figures/KMNIST (2).png" alt="KMNIST Image 2" style="width: 100px; height: 100px;">
+						<div style="font-size: 0.4em; text-align: center;"><span style="font-family: 'Courier New', monospace;">ℰ</span> = -199, <span style="font-family: 'Courier New', monospace;">𝒜</span> = 0.48</div>
+					</div>
+			
+					<div>
+						<img src="Figures/KMNIST (3).png" alt="KMNIST Image 3" style="width: 100px; height: 100px;">
+						<div style="font-size: 0.4em; text-align: center;"><span style="font-family: 'Courier New', monospace;">ℰ</span> = -180, <span style="font-family: 'Courier New', monospace;">𝒜</span> = 0.53</div>
+					</div>
+			
+					<div>
+						<img src="Figures/KMNIST (4).png" alt="KMNIST Image 4" style="width: 100px; height: 100px;">
+						<div style="font-size: 0.4em; text-align: center;"><span style="font-family: 'Courier New', monospace;">ℰ</span> = -185, <span style="font-family: 'Courier New', monospace;">𝒜</span> = 0.52</div>
+					</div>
+			
+					<div>
+						<img src="Figures/KMNIST (5).png" alt="KMNIST Image 5" style="width: 100px; height: 100px;">
+						<div style="font-size: 0.4em; text-align: center;"><span style="font-family: 'Courier New', monospace;">ℰ</span> = -195, <span style="font-family: 'Courier New', monospace;">𝒜</span> = 0.57</div>
+					</div>
+			
+					<div>
+						<img src="Figures/KMNIST (6).png" alt="KMNIST Image 6" style="width: 100px; height: 100px;">
+						<div style="font-size: 0.4em; text-align: center;"><span style="font-family: 'Courier New', monospace;">ℰ</span> = -190, <span style="font-family: 'Courier New', monospace;">𝒜</span> = 0.55</div>
+					</div>
+				</div>
+			
+				<!-- Bullet points for reconstruction error and anomaly score -->
+				<div style="text-align: left; font-size: 0.6em; color: black;">
+					<ul>
+						<li><strong>Key Observations:</strong>
+							<ul>
+								<li>dCVAE and FactorVAE models demonstrate low <span style="font-family: 'Courier New', monospace;">ℰ</span> and high <span style="font-family: 'Courier New', monospace;">𝒜</span> scores, indicating efficient anomaly detection.</li>
+								<li>Other models like VAE and CVAE show inconsistent <span style="font-family: 'Courier New', monospace;">ℰ</span> and <span style="font-family: 'Courier New', monospace;">𝒜</span> scores, suggesting limitations in accurately reconstructing anomalous samples.</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</section>
+									
+			<section style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; margin-top: 20px;">
+				<!-- Centered header -->
+				<h1 style="font-size: 0.8em; color: navy; font-weight: bold; margin-bottom: 20px; text-transform: none;text-transform: none;">Results - Latent Representations</h1>
+			
+				<!-- EMNIST Dataset Section -->
+				<div style="width: 100%; text-align: left; font-size: 0.6em; color: black; margin-bottom: 20px;">
+										<div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 0;">
+						<!-- EMNIST Images for Each Model -->
+						<div style="text-align: center;">
+							<h3 style="font-size: 0.5em; color: black;">beta-VAE</h3>
+							<img src="Figures/betaVAE_EMNIST.png" alt="beta-VAE EMNIST" style="width: 100px; height: 100px;">
+						</div>
+						<div style="text-align: center;">
+							<h3 style="font-size: 0.5em; color: black;">CVAE</h3>
+							<img src="Figures/CVAE_EMNIST.png" alt="CVAE EMNIST" style="width: 100px; height: 100px;">
+						</div>
+						<div style="text-align: center;">
+							<h3 style="font-size: 0.5em; color: black;">dCVAE</h3>
+							<img src="Figures/dcvae_EMNIST.png" alt="dCVAE EMNIST" style="width: 100px; height: 100px;">
+						</div>
+						<div style="text-align: center;">
+							<h3 style="font-size: 0.5em; color: black;">FactorVAE</h3>
+							<img src="Figures/FactorVAE_EMNIST.png" alt="FactorVAE EMNIST" style="width: 100px; height: 100px;">
+						</div>
+						<div style="text-align: center;">
+							<h3 style="font-size: 0.5em; color: black;">RFVAE</h3>
+							<img src="Figures/RFVAE_EMNIST.png" alt="RFVAE EMNIST" style="width: 100px; height: 100px;">
+						</div>
+					</div>
+				</div>
+			
+				<!-- KMNIST Dataset Section -->
+				<div style="width: 100%; text-align: left; font-size: 0.6em; color: black; margin-bottom: 20px;">
+					
+					<div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 0;">
+						<!-- KMNIST Images for Each Model -->
+						<div style="text-align: center;">
+							<h3 style="font-size: 0.5em; color: black;">beta-VAE</h3>
+							<img src="Figures/betaVAE_KMNIST.png" alt="beta-VAE KMNIST" style="width: 100px; height: 100px;">
+						</div>
+						<div style="text-align: center;">
+							<h3 style="font-size: 0.5em; color: black;">CVAE</h3>
+							<img src="Figures/CVAE_KMNIST.png" alt="CVAE KMNIST" style="width: 100px; height: 100px;">
+						</div>
+						<div style="text-align: center;">
+							<h3 style="font-size: 0.5em; color: black;">dCVAE</h3>
+							<img src="Figures/dcvae_KMNIST.png" alt="dCVAE KMNIST" style="width: 100px; height: 100px;">
+						</div>
+						<div style="text-align: center;">
+							<h3 style="font-size: 0.5em; color: black;">FactorVAE</h3>
+							<img src="Figures/FactorVAE_KMNIST.png" alt="FactorVAE KMNIST" style="width: 100px; height: 100px;">
+						</div>
+						<div style="text-align: center;">
+							<h3 style="font-size: 0.5em; color: black;">RFVAE</h3>
+							<img src="Figures/RFVAE_KMNIST.png" alt="RFVAE KMNIST" style="width: 100px; height: 100px;">
+						</div>
+					</div>
+				</div>
+			
+				<!-- Key Observations -->
+				<div style="text-align: left; font-size: 0.45em; color: black;">
+					<ul>
+						<li><strong>Key Observations:</strong>
+							<ul>
+								<li>dCVAE achieves the most distinct and well-separated clusters across classes in both datasets, showing effective disentanglement.</li>
+								<li>FactorVAE also provides meaningful latent separations but is less consistent compared to dCVAE.</li>
+								<li>beta-VAE and CVAE display less organized latent representations, suggesting challenges in class separation.</li>
+								<li>RFVAE shows dispersed clusters with limited class separation, indicating weaker disentanglement capabilities.</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</section>
+																			
+			<section style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; margin-top: 20px;">
+				<!-- Centered header -->
+				<h1 style="font-size: 0.8em; color: navy; font-weight: bold; margin-bottom: 20px; text-transform: none;text-transform: none;">Results - Manifold Embeddings</h1>
+			
+				<!-- EMNIST Dataset Section -->
+				<div style="width: 100%; text-align: left; font-size: 0.6em; color: black; margin-bottom: 20px;">
+					<div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 0;">
+						<!-- EMNIST Images for Each Model -->
+						<div style="text-align: center;">
+							<h3 style="font-size: 0.5em; color: black;">VAE</h3>
+							<img src="Figures/vae_latent_embedding_EMNIST.png" alt="VAE EMNIST" style="width: 100px; height: 100px;">
+						</div>
+						<div style="text-align: center;">
+							<h3 style="font-size: 0.5em; color: black;">beta-VAE</h3>
+							<img src="Figures/betavae_latent_embedding_EMNIST.png" alt="beta-VAE EMNIST" style="width: 100px; height: 100px;">
+						</div>
+						<div style="text-align: center;">
+							<h3 style="font-size: 0.5em; color: black;">CVAE</h3>
+							<img src="Figures/cvae_latent_embedding_EMNIST.png" alt="CVAE EMNIST" style="width: 100px; height: 100px;">
+						</div>
+						<div style="text-align: center;">
+							<h3 style="font-size: 0.5em; color: black;">dCVAE</h3>
+							<img src="Figures/dcvae_latent_embedding_EMNIST.png" alt="dCVAE EMNIST" style="width: 100px; height: 100px;">
+						</div>
+						<div style="text-align: center;">
+							<h3 style="font-size: 0.5em; color: black;">FactorVAE</h3>
+							<img src="Figures/FactorVAE_latent_embedding_EMNIST.png" alt="FactorVAE EMNIST" style="width: 100px; height: 100px;">
+						</div>
+						<div style="text-align: center;">
+							<h3 style="font-size: 0.5em; color: black;">RFVAE</h3>
+							<img src="Figures/RFVAE_latent_embedding_EMNIST.png" alt="RFVAE EMNIST" style="width: 100px; height: 100px;">
+						</div>
+					</div>
+				</div>
+			
+				<!-- KMNIST Dataset Section -->
+				<div style="width: 100%; text-align: left; font-size: 0.6em; color: black; margin-bottom: 20px;">
+					<div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 0;">
+						<!-- KMNIST Images for Each Model -->
+						<div style="text-align: center;">
+							<h3 style="font-size: 0.5em; color: black;">VAE</h3>
+							<img src="Figures/vae_latent_embedding_KMNIST.png" alt="VAE KMNIST" style="width: 100px; height: 100px;">
+						</div>
+						<div style="text-align: center;">
+							<h3 style="font-size: 0.5em; color: black;">beta-VAE</h3>
+							<img src="Figures/betavae_latent_embedding_KMNIST.png" alt="beta-VAE KMNIST" style="width: 100px; height: 100px;">
+						</div>
+						<div style="text-align: center;">
+							<h3 style="font-size: 0.5em; color: black;">CVAE</h3>
+							<img src="Figures/cvae_latent_embedding_KMNIST.png" alt="CVAE KMNIST" style="width: 100px; height: 100px;">
+						</div>
+						<div style="text-align: center;">
+							<h3 style="font-size: 0.5em; color: black;">dCVAE</h3>
+							<img src="Figures/dcvae_latent_embedding_KMNIST.png" alt="dCVAE KMNIST" style="width: 100px; height: 100px;">
+						</div>
+						<div style="text-align: center;">
+							<h3 style="font-size: 0.5em; color: black;">FactorVAE</h3>
+							<img src="Figures/FactorVAE_latent_embedding_KMNIST.png" alt="FactorVAE KMNIST" style="width: 100px; height: 100px;">
+						</div>
+						<div style="text-align: center;">
+							<h3 style="font-size: 0.5em; color: black;">RFVAE</h3>
+							<img src="Figures/RFVAE_latent_embedding_KMNIST.png" alt="RFVAE KMNIST" style="width: 100px; height: 100px;">
+						</div>
+					</div>
+				</div>
+			
+				<!-- Key Observations -->
+				<div style="text-align: left; font-size: 0.45em; color: black;">
+					<ul>
+						<li><strong>Key Observations:</strong>
+							<ul>
+								<li>dCVAE shows the clearest and most consistent latent manifold structures, providing distinct class clusters.</li>
+								<li>FactorVAE maintains class separations but displays some overlapping areas in both datasets.</li>
+								<li>VAE and beta-VAE reveal less structured manifolds, with less pronounced separations between classes.</li>
+								<li>RFVAE demonstrates weaker structure, with dispersed embeddings that do not distinctly cluster by class.</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</section>
+				
+			<section style="display: flex; flex-direction: column; align-items: center; justify-content: center; margin-top: 10px;">
+				<!-- Centered header -->
+				<h1 style="font-size: 0.8em; color: navy; font-weight: bold; margin-bottom: 20px; text-align: center;text-transform: none;">Training Time and AUC Analysis</h1>
+			
+				<!-- Container for left and right sections -->
+				<div style="display: flex; width: 100%; max-width: 800px;">
+					<!-- Left container for the table -->
+					<div style="flex: 1; margin-right: 20px; display: flex; justify-content: center;">
+						<table style="width: 100%; font-size: 0.5em; border-collapse: collapse; text-align: center;">
+							<caption style="caption-side: top; font-weight: bold; font-size: 0.6em; color: black; margin-bottom: 10px;">Model Training Time and AUC Scores</caption>
+							<thead style="background-color: #f2f2f2;">
+								<tr>
+									<th style="border: 1px solid black; padding: 5px;">Model</th>
+									<th style="border: 1px solid black; padding: 5px;" colspan="2">EMNIST</th>
+									<th style="border: 1px solid black; padding: 5px;" colspan="2">KMNIST</th>
+								</tr>
+								<tr>
+									<th style="border: 1px solid black; padding: 5px;"></th>
+									<th style="border: 1px solid black; padding: 5px;">AUC</th>
+									<th style="border: 1px solid black; padding: 5px;">Training Time (min)</th>
+									<th style="border: 1px solid black; padding: 5px;">AUC</th>
+									<th style="border: 1px solid black; padding: 5px;">Training Time (min)</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td style="border: 1px solid black; padding: 5px;">dCVAE</td>
+									<td style="border: 1px solid black; padding: 5px; font-weight: bold;">78.98</td>
+									<td style="border: 1px solid black; padding: 5px; font-weight: bold;">102</td>
+									<td style="border: 1px solid black; padding: 5px; font-weight: bold;">61.02</td>
+									<td style="border: 1px solid black; padding: 5px;">95</td>
+								</tr>
+								<tr>
+									<td style="border: 1px solid black; padding: 5px;">VAE</td>
+									<td style="border: 1px solid black; padding: 5px;">67.23</td>
+									<td style="border: 1px solid black; padding: 5px;">92</td>
+									<td style="border: 1px solid black; padding: 5px;">51.13</td>
+									<td style="border: 1px solid black; padding: 5px;">78</td>
+								</tr>
+								<tr>
+									<td style="border: 1px solid black; padding: 5px;">CVAE</td>
+									<td style="border: 1px solid black; padding: 5px;">66.01</td>
+									<td style="border: 1px solid black; padding: 5px;">117</td>
+									<td style="border: 1px solid black; padding: 5px; font-weight: bold;">42.35</td>
+									<td style="border: 1px solid black; padding: 5px;">104</td>
+								</tr>
+								<tr>
+									<td style="border: 1px solid black; padding: 5px;">FactorVAE</td>
+									<td style="border: 1px solid black; padding: 5px;">62.91</td>
+									<td style="border: 1px solid black; padding: 5px; font-weight: bold;">138</td>
+									<td style="border: 1px solid black; padding: 5px;">49.23</td>
+									<td style="border: 1px solid black; padding: 5px;">117</td>
+								</tr>
+								<tr>
+									<td style="border: 1px solid black; padding: 5px;">&beta;-VAE</td>
+									<td style="border: 1px solid black; padding: 5px;">65.12</td>
+									<td style="border: 1px solid black; padding: 5px;">123</td>
+									<td style="border: 1px solid black; padding: 5px;">50.01</td>
+									<td style="border: 1px solid black; padding: 5px;">119</td>
+								</tr>
+								<tr>
+									<td style="border: 1px solid black; padding: 5px;">RFVAE</td>
+									<td style="border: 1px solid black; padding: 5px;">55.03</td>
+									<td style="border: 1px solid black; padding: 5px;">130</td>
+									<td style="border: 1px solid black; padding: 5px;">49.51</td>
+									<td style="border: 1px solid black; padding: 5px; font-weight: bold;">132</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+			
+					<!-- Right container for explanation -->
+					<div style="flex: 1; font-size: 0.5em; color: black;">
+						<h2 style="font-size: 1em; color: navy; font-weight: bold; margin-bottom: 10px; text-align: center;text-transform: none;">Training Time & AUC Analysis</h2>
+						<ul>
+							<li><strong>dCVAE</strong> achieves the highest AUC scores on both EMNIST and KMNIST datasets.</li>
+							<li><strong>FactorVAE</strong> has the longest training time (138 minutes on EMNIST and 117 minutes on KMNIST), indicating a more computationally demanding process.</li>
+							<li><strong>RFVAE</strong> shows high training times, especially on KMNIST (132 minutes).</li>
+							<li><strong>VAE</strong> and <strong>&beta;-VAE</strong> offer moderate AUC scores and training times, but do not match the performance efficiency seen in dCVAE.</li>
+							<li><strong>CVAE</strong> achieves the shortest training time on KMNIST, reflecting a trade-off between training efficiency and detection accuracy.</li>
+						</ul>
+					</div>
+				</div>
+			</section>
+										
+			<section style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; margin-top: 20px;">
+				<!-- Centered header -->
+				<h1 style="font-size: 0.8em; color: navy; font-weight: bold; margin-bottom: 20px; text-align: center;text-transform: none;">Final Takeaways</h1>
+			
+				<!-- Bullet points for takeaways -->
+				<div style="width: 80%; font-size: 0.6em; color: black; text-align: left;">
+					<ul>
+						<li><strong>dCVAE and FactorVAE</strong> demonstrate superior performance in anomaly detection, particularly with high AUC scores and distinct latent separations, making them ideal for nuanced anomaly analysis.</li>
+						<br>
+						<li><strong>Trade-off between Training Time and Accuracy:</strong> Models like FactorVAE show higher training time but consistent latent clustering, whereas CVAE achieves faster training with some compromise on AUC scores.</li>
+						<br>
+						<li><strong>RFVAE Limitations:</strong> While computationally intensive, RFVAE struggles to provide well-separated latent representations, indicating limited effectiveness in anomaly detection applications.</li>
+						<br>
+						<li><strong>Practical Implications:</strong> dCVAE is recommended for applications prioritizing accuracy and interpretability, while VAE-based models are more suited for less resource-intensive environments with moderate accuracy needs.</li>
+					</ul>
+				</div>
+			</section>
+
+<section style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; margin-top: 20px;">
+    <!-- Centered header -->
+    <h1 style="font-size: 0.8em; color: navy; font-weight: bold; margin-bottom: 20px; text-transform: none;">Conclusion</h1>
+	<br>
+    <!-- Bullet points for conclusion -->
+    <div style="width: 90%; font-size: 0.6em; color: black; text-align: left; margin-left: 30px;">
+        <ul>
+            <li>dCVAE enhances unsupervised anomaly detection by leveraging disentangled learning, TC loss, and optimized reconstruction quality.</li>
+            <br>
+            <li>The model’s architecture supports diverse applications in controlled image synthesis, molecular design, bio-signal separation, and conditional text generation.</li>
+            <br>
+            <li>Future work will explore reducing posterior-prior distribution gaps and refining loss trade-offs to further improve dCVAE’s robustness and performance.</li>
+        </ul>
+    </div>
+</section>
+					
+<section style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; margin-top: 20px;">
+    <!-- Centered header for Acknowledgments -->
+    <h1 style="font-size: 0.8em; color: navy; font-weight: bold; margin-bottom: 20px; text-transform: none;">Acknowledgments</h1>
+    <br>
+    <!-- Acknowledgments text -->
+    <div style="width: 90%; font-size: 0.5em; color: black; text-align: center;">
+        <p>We would like to acknowledge support from the NSERC CREATE grant on the Visual and Automated Disease Analytics program.</p>
+        <p>MT also acknowledges funding via a Discovery Grant from the Natural Sciences and Engineering Research Council of Canada (NSERC), RGPIN-2021-04073.</p>
+        <p>AAN acknowledges supplemental Professional Development (SPD) from Douglas College.</p>
+    </div>
+</section>
+
+<!-- Thank You slide -->
+<section style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; margin-top: 40px;">
+    <h1 style="font-size: 1.2em; color: navy; font-weight: bold; margin-top: 100px;">Thank You!</h1>
+</section>
+			
+        </div>
+    </div>
+
+    <script>
+        // Initialize Reveal.js
+        Reveal.initialize();
+
+        // Generate neural network background
+        const bg = document.getElementById("neural-bg");
+
+        // Function to create random nodes and connections
+        function createNode(x, y) {
+            const node = document.createElement("div");
+            node.className = "node";
+            node.style.left = `${x}px`;
+            node.style.top = `${y}px`;
+            bg.appendChild(node);
+            return node;
+        }
+
+        function createConnection(x1, y1, x2, y2) {
+            const connection = document.createElement("div");
+            connection.className = "connection";
+            const length = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
+            connection.style.width = `${length}px`;
+            connection.style.transform = `rotate(${Math.atan2(y2 - y1, x2 - x1)}rad)`;
+            connection.style.left = `${x1}px`;
+            connection.style.top = `${y1}px`;
+            bg.appendChild(connection);
+        }
+
+        // Generate nodes and connections
+        for (let i = 0; i < 20; i++) {
+            const x = Math.random() * window.innerWidth;
+            const y = Math.random() * window.innerHeight;
+            const node1 = createNode(x, y);
+
+            if (Math.random() > 0.5) {
+                const x2 = x + (Math.random() * 100 - 50);
+                const y2 = y + (Math.random() * 100 - 50);
+                const node2 = createNode(x2, y2);
+                createConnection(x, y, x2, y2);
+            }
+        }
+    </script>
+</body>
+</html>

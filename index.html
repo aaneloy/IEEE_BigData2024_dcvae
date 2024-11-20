@@ -17,6 +17,17 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
 
     <style>
+
+
+.zoom-image {
+        transition: transform 0.3s ease-in-out;
+        cursor: pointer; /* Optional: indicates the image is interactive */
+    }
+
+    .zoom-image:hover {
+        transform: scale(1.5); /* Adjust zoom level */
+    }
+			
 /* Background styling */
 body {
             background-color: #e8f0ff;
@@ -193,36 +204,70 @@ body {
                 </div>
             </section>
 
+
 			<section style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; margin-top: 20px;">
 				<!-- Centered header -->
-				<h1 style="font-size: 0.8em; color: navy; font-weight: bold; margin-bottom: 20px;text-transform: none;">Unsupervised Anomaly Detection using Auto-encoders</h1>
+				<h1 style="font-size: 0.8em; color: navy; font-weight: bold; margin-bottom: 20px; text-transform: none;">Unsupervised Anomaly Detection using Auto-encoders</h1>
+			
+				<!-- Text Content -->
+				<div style="width: 80%; font-size: 0.50em; color: black; text-align: left; margin-bottom: 20px;">
+					<ul>
+						<li><strong>Why Autoencoders Work Well:</strong>
+							<ul>
+								<li>Learn compressed representations, making it easier to identify deviations.</li>
+								<li>Capture complex patterns in data without needing labeled examples.</li>
+								<li>Ideal for high-dimensional data like images or sensor data.</li>
+							</ul>
+						</li>
+						<br>
+						<li><strong>How Autoencoders Detect Anomalies:</strong>
+							<ul>
+								<li>Reconstruct input data and flag high reconstruction errors as anomalies.</li>
+								<li>Can adapt to various domains, identifying subtle anomalies in healthcare, cybersecurity, and more.</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			
+				<!-- Image with hover zoom effect -->
+				<div style="width: 100%; text-align: center;">
+					<img src="Figures/VAE.png" alt="VAE Diagram" style="width: 100%; height: auto; border: 0px solid #ccc; transition: transform 0.3s ease;">
+				</div>
+			
+				<style>
+					/* Hover effect for image */
+					img:hover {
+						transform: scale(1.1); /* Zoom the image by 10% */
+					}
+				</style>
+			</section>
+			
+			
+			
+			
+			
+			<section style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; margin-top: 20px;">
+				<!-- Centered header -->
+				<h1 style="font-size: 0.8em; color: navy; font-weight: bold; margin-bottom: 20px; text-transform: none;">Unsupervised Anomaly Detection using Auto-encoders</h1>
 				
 				<div style="display: flex; width: 100%; justify-content: space-between; align-items: flex-start;">
 					<!-- Left side: Text content -->
 					<div style="width: 60%; padding-right: 20px; text-align: left;">
 						<div style="font-size: 0.50em; color: black;">
+							<br>
 							<ul>
-								<li><strong>Why Auto-encoders:</strong>
-									<ul>
-										<li>Learn compressed representations, making it easier to identify deviations.</li>
-										<li>Capture complex patterns in data without needing labeled examples.</li>
-										<li>Ideal for high-dimensional data like images or sensor data.</li>
-									</ul>
-								</li>
-								<li><strong>How Autoencoders Detect Anomalies:</strong>
-									<ul>
-										<li>Reconstruct input data and flag high reconstruction errors as anomalies.</li>
-										<li>Can adapt to various domains, identifying subtle anomalies in healthcare, cybersecurity, and more.</li>
-									</ul>
-								</li>
 								<li><strong>Autoencoders in Anomaly Detection:</strong>
+									<br>
+									<br>
 									<ul>
 										<li><strong>Why Autoencoders?</strong> Autoencoders efficiently capture the core structure in data, making them effective for anomaly detection.</li>
-										<li><strong>Low Reconstruction Error:</strong> Normal data points have low reconstruction error, fitting closely to learned patterns</li>
+										<br>
+										<li><strong>Low Reconstruction Error:</strong> Normal data points have low reconstruction error, fitting closely to learned patterns.</li>
+										<br>
 										<li>Continuously learn from new data, ideal for dynamic, real-time environments.</li>
 									</ul>
 								</li>
-								</ul>
+							</ul>
 						</div>
 					</div>
 			
@@ -258,9 +303,11 @@ body {
 						showlegend: true,
 					};
 			
+					// Render the plot
 					Plotly.newPlot('autoencoder-visual', [normalData, anomaly, reconstructedNormal, reconstructedAnomaly], layout);
 				</script>
 			</section>
+			
 
 			<section style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; margin-top: 20px;">
 				<!-- Centered header -->
@@ -540,7 +587,6 @@ body {
 					</ul>
 				</div>
 			</section>
-					
 															
 			
 			<section style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; margin-top: 20px;">
@@ -551,69 +597,69 @@ body {
 				<div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-bottom: 20px;">
 					<!-- EMNIST images row 1 with scores -->
 					<div>
-						<img src="Figures/EMNIST (1).png" alt="EMNIST Image 1" style="width: 100px; height: 100px;">
+						<img src="Figures/EMNIST (1).png" alt="EMNIST Image 1" style="width: 100px; height: 100px; transition: transform 0.3s ease;">
 						<div style="font-size: 0.4em; text-align: center;"><span style="font-family: 'Courier New', monospace;">ℰ</span> = -235, <span style="font-family: 'Courier New', monospace;">𝒜</span> = 0.97</div>
 					</div>
-					
+			
 					<div>
-						<img src="Figures/EMNIST (2).png" alt="EMNIST Image 2" style="width: 100px; height: 100px;">
+						<img src="Figures/EMNIST (2).png" alt="EMNIST Image 2" style="width: 100px; height: 100px; transition: transform 0.3s ease;">
 						<div style="font-size: 0.4em; text-align: center;"><span style="font-family: 'Courier New', monospace;">ℰ</span> = -248, <span style="font-family: 'Courier New', monospace;">𝒜</span> = 0.90</div>
 					</div>
 			
 					<div>
-						<img src="Figures/EMNIST (3).png" alt="EMNIST Image 3" style="width: 100px; height: 100px;">
+						<img src="Figures/EMNIST (3).png" alt="EMNIST Image 3" style="width: 100px; height: 100px; transition: transform 0.3s ease;">
 						<div style="font-size: 0.4em; text-align: center;"><span style="font-family: 'Courier New', monospace;">ℰ</span> = -245, <span style="font-family: 'Courier New', monospace;">𝒜</span> = 0.91</div>
 					</div>
 			
 					<div>
-						<img src="Figures/EMNIST (4).png" alt="EMNIST Image 4" style="width: 100px; height: 100px;">
+						<img src="Figures/EMNIST (4).png" alt="EMNIST Image 4" style="width: 100px; height: 100px; transition: transform 0.3s ease;">
 						<div style="font-size: 0.4em; text-align: center;"><span style="font-family: 'Courier New', monospace;">ℰ</span> = -246, <span style="font-family: 'Courier New', monospace;">𝒜</span> = 0.91</div>
 					</div>
 			
 					<div>
-						<img src="Figures/EMNIST (5).png" alt="EMNIST Image 5" style="width: 100px; height: 100px;">
+						<img src="Figures/EMNIST (5).png" alt="EMNIST Image 5" style="width: 100px; height: 100px; transition: transform 0.3s ease;">
 						<div style="font-size: 0.4em; text-align: center;"><span style="font-family: 'Courier New', monospace;">ℰ</span> = -244, <span style="font-family: 'Courier New', monospace;">𝒜</span> = 0.92</div>
 					</div>
 			
 					<div>
-						<img src="Figures/EMNIST (6).png" alt="EMNIST Image 6" style="width: 100px; height: 100px;">
+						<img src="Figures/EMNIST (6).png" alt="EMNIST Image 6" style="width: 100px; height: 100px; transition: transform 0.3s ease;">
 						<div style="font-size: 0.4em; text-align: center;"><span style="font-family: 'Courier New', monospace;">ℰ</span> = -246, <span style="font-family: 'Courier New', monospace;">𝒜</span> = 0.92</div>
 					</div>
 			
 					<!-- KMNIST images row 2 with scores -->
 					<div>
-						<img src="Figures/KMNIST (1).png" alt="KMNIST Image 1" style="width: 100px; height: 100px;">
+						<img src="Figures/KMNIST (1).png" alt="KMNIST Image 1" style="width: 100px; height: 100px; transition: transform 0.3s ease;">
 						<div style="font-size: 0.4em; text-align: center;"><span style="font-family: 'Courier New', monospace;">ℰ</span> = -171, <span style="font-family: 'Courier New', monospace;">𝒜</span> = 0.33</div>
 					</div>
-					
+			
 					<div>
-						<img src="Figures/KMNIST (2).png" alt="KMNIST Image 2" style="width: 100px; height: 100px;">
+						<img src="Figures/KMNIST (2).png" alt="KMNIST Image 2" style="width: 100px; height: 100px; transition: transform 0.3s ease;">
 						<div style="font-size: 0.4em; text-align: center;"><span style="font-family: 'Courier New', monospace;">ℰ</span> = -199, <span style="font-family: 'Courier New', monospace;">𝒜</span> = 0.48</div>
 					</div>
 			
 					<div>
-						<img src="Figures/KMNIST (3).png" alt="KMNIST Image 3" style="width: 100px; height: 100px;">
+						<img src="Figures/KMNIST (3).png" alt="KMNIST Image 3" style="width: 100px; height: 100px; transition: transform 0.3s ease;">
 						<div style="font-size: 0.4em; text-align: center;"><span style="font-family: 'Courier New', monospace;">ℰ</span> = -180, <span style="font-family: 'Courier New', monospace;">𝒜</span> = 0.53</div>
 					</div>
 			
 					<div>
-						<img src="Figures/KMNIST (4).png" alt="KMNIST Image 4" style="width: 100px; height: 100px;">
+						<img src="Figures/KMNIST (4).png" alt="KMNIST Image 4" style="width: 100px; height: 100px; transition: transform 0.3s ease;">
 						<div style="font-size: 0.4em; text-align: center;"><span style="font-family: 'Courier New', monospace;">ℰ</span> = -185, <span style="font-family: 'Courier New', monospace;">𝒜</span> = 0.52</div>
 					</div>
 			
 					<div>
-						<img src="Figures/KMNIST (5).png" alt="KMNIST Image 5" style="width: 100px; height: 100px;">
+						<img src="Figures/KMNIST (5).png" alt="KMNIST Image 5" style="width: 100px; height: 100px; transition: transform 0.3s ease;">
 						<div style="font-size: 0.4em; text-align: center;"><span style="font-family: 'Courier New', monospace;">ℰ</span> = -195, <span style="font-family: 'Courier New', monospace;">𝒜</span> = 0.57</div>
 					</div>
 			
 					<div>
-						<img src="Figures/KMNIST (6).png" alt="KMNIST Image 6" style="width: 100px; height: 100px;">
+						<img src="Figures/KMNIST (6).png" alt="KMNIST Image 6" style="width: 100px; height: 100px; transition: transform 0.3s ease;">
 						<div style="font-size: 0.4em; text-align: center;"><span style="font-family: 'Courier New', monospace;">ℰ</span> = -190, <span style="font-family: 'Courier New', monospace;">𝒜</span> = 0.55</div>
 					</div>
 				</div>
 			
 				<!-- Bullet points for reconstruction error and anomaly score -->
-				<div style="text-align: left; font-size: 0.6em; color: black;">
+				<div style="text-align: left; font-size: 0.5em; color: black;">
 					<ul>
 						<li><strong>Key Observations:</strong>
 							<ul>
@@ -623,7 +669,18 @@ body {
 						</li>
 					</ul>
 				</div>
+			
+				<style>
+					/* Hover effect for images */
+					img:hover {
+						transform: scale(3.5); /* Zoom the image by 20% */
+					}
+				</style>
 			</section>
+			
+			
+
+			
 									
 			<section style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; margin-top: 20px;">
 				<!-- Centered header -->

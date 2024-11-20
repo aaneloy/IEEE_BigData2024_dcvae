@@ -17,12 +17,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
 
     <style>
-        /* Background styling */
-        body {
-            background-color: #f0f4fa;
+/* Background styling */
+body {
+            background-color: #e8f0ff;
             overflow: hidden;
         }
 
+        /* Neural network animation */
         /* Neural network animation */
         .neural-bg {
             position: fixed;
@@ -31,28 +32,30 @@
             width: 100%;
             height: 100%;
             z-index: -1;
-            opacity: 0.1;
+            opacity: 0.15;
+            pointer-events: none;
         }
 
         .node {
             position: absolute;
-            width: 8px;
-            height: 8px;
-            background-color: #000;
+            width: 6px;
+            height: 6px;
+            background-color: #3c3f41;
             border-radius: 50%;
             animation: floatNode 10s ease-in-out infinite;
         }
 
         @keyframes floatNode {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
+            50% { transform: translateY(-10px); }
         }
 
         .connection {
             position: absolute;
-            width: 2px;
-            background-color: #000;
+            width: 1px;
+            background-color: #3c3f41;
             transform-origin: top left;
+            opacity: 0.8;
         }
 
         /* Title styling with hover effect */
@@ -80,7 +83,7 @@
         }
 
         .designation {
-            font-size: 0.5em;
+            font-size: 0.4em;
             color: black;
             margin-bottom: 10px;
         }
@@ -146,7 +149,7 @@
                 <!-- Title with smaller font -->
                 <div class="title" style="font-size: 1.1em; color: navy;">Disentangled Conditional Variational Autoencoder for Unsupervised Anomaly Detection</div>
                 <!-- Conference subtitle with smaller font -->
-                <div class="normal-text" style="font-size: 0.4em; margin-top: 5px;">PaperID: BigData693, 2024 IEEE International Conference on Big Data (IEEE BigData 2024), Washington, DC, USA - December 15 - 18, 2024</div>
+                <div class="normal-text" style="font-size: 0.45em; margin-top: 5px;">PaperID: BigData693, 2024 IEEE International Conference on Big Data (IEEE BigData 2024), Washington, DC, USA <br> December 15 - 18, 2024</div>
                 
                 <!-- Two-column layout for authors, evenly spaced -->
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
@@ -154,11 +157,11 @@
                     <div class="author-info" style="text-align: left; width: 48%;">
                         <img src="Figures/asif.jpg" alt="Asif Ahmed Neloy" class="author-headshot">
                         <div>
-                            <a href="https://aaneloy.github.io/" target="_blank" class="author-link">Asif Ahmed Neloy</a>
-                            <div class="designation">Faculty Member, Douglas College &<br>
-                                University of British Columbia (UBC)<br>
+                            <b><a href="https://aaneloy.github.io/" target="_blank" class="author-link">Asif Ahmed Neloy</a></b>
+                            <div class="designation">Faculty Member, Douglas College <br>
+                                Adjunct Faculty, University of British Columbia (UBC)<br>
                                 Canada.<br>
-								<span style="color: #000080; text-decoration: underline;">neloya@douglascollege.ca</span>
+								<span style="color: #002147; text-decoration: underline;margin-top: 15px;"><b>neloya@douglascollege.ca</b></span>
                             </div>
                         </div>
                     </div>
@@ -167,11 +170,11 @@
                     <div class="author-info" style="text-align: left; width: 50%;">
                         <img src="Figures/max.jpg" alt="Dr. Maxime Turgeon" class="author-headshot">
                         <div>
-                            <a href="https://www.maxturgeon.ca/" target="_blank" class="author-link">Dr. Maxime Turgeon</a>
+                            <b><a href="https://www.maxturgeon.ca/" target="_blank" class="author-link">Dr. Maxime Turgeon</a></b>
                             <div class="designation">Data Scientist, Tesera Systems <br>
                                 Adjunct Professor, Department of Statistics, University of Manitoba<br>
                                 Canada.<br>
-								<span style="color: #000080; text-decoration: underline;">max.turgeon@umanitoba.ca</span>
+								<span style="color: #002147; text-decoration: underline;margin-top: 15px;"><b>max.turgeon@umanitoba.ca</b></span>
                             </div>
                         </div>
                     </div>
@@ -763,7 +766,7 @@
 				</div>
 			
 				<!-- Key Observations -->
-				<div style="text-align: left; font-size: 0.45em; color: black;">
+				<div style="text-align: left; font-size: 0.40em; color: black;">
 					<ul>
 						<li><strong>Key Observations:</strong>
 							<ul>
@@ -786,7 +789,7 @@
 					<!-- Left container for the table -->
 					<div style="flex: 1; margin-right: 20px; display: flex; justify-content: center;">
 						<table style="width: 100%; font-size: 0.5em; border-collapse: collapse; text-align: center;">
-							<caption style="caption-side: top; font-weight: bold; font-size: 0.6em; color: black; margin-bottom: 10px;">Model Training Time and AUC Scores</caption>
+							<caption style="caption-side: top; font-weight: bold; font-size: 0.8em; color: black; margin-bottom: 10px;">Model Training Time and AUC Scores</caption>
 							<thead style="background-color: #f2f2f2;">
 								<tr>
 									<th style="border: 1px solid black; padding: 5px;">Model</th>
@@ -904,7 +907,7 @@
     <div style="width: 90%; font-size: 0.5em; color: black; text-align: center;">
         <p>We would like to acknowledge support from the NSERC CREATE grant on the Visual and Automated Disease Analytics program.</p>
         <p>MT also acknowledges funding via a Discovery Grant from the Natural Sciences and Engineering Research Council of Canada (NSERC), RGPIN-2021-04073.</p>
-        <p>AAN acknowledges supplemental Professional Development (SPD) from Douglas College.</p>
+        <p>AAN acknowledges Supplemental Professional Development (SPD) from Douglas College.</p>
     </div>
 </section>
 
@@ -918,45 +921,55 @@
 
     <script>
         // Initialize Reveal.js
-        Reveal.initialize();
+		Reveal.initialize();
 
-        // Generate neural network background
-        const bg = document.getElementById("neural-bg");
+const bg = document.getElementById("neural-bg");
 
-        // Function to create random nodes and connections
-        function createNode(x, y) {
-            const node = document.createElement("div");
-            node.className = "node";
-            node.style.left = `${x}px`;
-            node.style.top = `${y}px`;
-            bg.appendChild(node);
-            return node;
-        }
+function createNode(x, y) {
+	const node = document.createElement("div");
+	node.className = "node";
+	node.style.left = `${x}px`;
+	node.style.top = `${y}px`;
+	bg.appendChild(node);
+	return node;
+}
 
-        function createConnection(x1, y1, x2, y2) {
-            const connection = document.createElement("div");
-            connection.className = "connection";
-            const length = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
-            connection.style.width = `${length}px`;
-            connection.style.transform = `rotate(${Math.atan2(y2 - y1, x2 - x1)}rad)`;
-            connection.style.left = `${x1}px`;
-            connection.style.top = `${y1}px`;
-            bg.appendChild(connection);
-        }
+function createConnection(x1, y1, x2, y2) {
+	const connection = document.createElement("div");
+	connection.className = "connection";
+	const length = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
+	connection.style.width = `${length}px`;
+	connection.style.transform = `rotate(${Math.atan2(y2 - y1, x2 - x1)}rad)`;
+	connection.style.left = `${x1}px`;
+	connection.style.top = `${y1}px`;
+	bg.appendChild(connection);
+}
 
-        // Generate nodes and connections
-        for (let i = 0; i < 20; i++) {
-            const x = Math.random() * window.innerWidth;
-            const y = Math.random() * window.innerHeight;
-            const node1 = createNode(x, y);
+// Create network layers
+const layers = 3; // Number of layers for the neural network effect
+const nodesPerLayer = 10; // Nodes per layer
+const layerHeight = window.innerHeight / layers;
 
-            if (Math.random() > 0.5) {
-                const x2 = x + (Math.random() * 100 - 50);
-                const y2 = y + (Math.random() * 100 - 50);
-                const node2 = createNode(x2, y2);
-                createConnection(x, y, x2, y2);
-            }
-        }
-    </script>
+for (let layer = 0; layer < layers; layer++) {
+	for (let i = 0; i < nodesPerLayer; i++) {
+		const x = Math.random() * window.innerWidth;
+		const y = layer * layerHeight + Math.random() * layerHeight;
+		const node = createNode(x, y);
+
+		// Randomly connect to other nodes within the same layer
+		if (i > 0 && Math.random() > 0.5) {
+			const prevNode = document.getElementsByClassName("node")[i - 1];
+			createConnection(parseFloat(prevNode.style.left), parseFloat(prevNode.style.top), x, y);
+		}
+
+		// Optionally connect to nodes in previous layers for a multi-layer network effect
+		if (layer > 0 && Math.random() > 0.3) {
+			const prevLayerNode = document.getElementsByClassName("node")[(layer - 1) * nodesPerLayer + Math.floor(Math.random() * nodesPerLayer)];
+			createConnection(parseFloat(prevLayerNode.style.left), parseFloat(prevLayerNode.style.top), x, y);
+		}
+	}
+}    
+
+</script>
 </body>
 </html>
